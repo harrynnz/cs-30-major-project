@@ -1,16 +1,43 @@
-// Project Title
-// Your Name
-// Date
+// cs30 major project
+// Harry Huynh
 //
-// Extra for Experts:
-// - describe what you did to take this project "above and beyond"
 
+let theGrid = [[0, 0, 0, 0, 0],
+               [0, 0, 0, 0, 0],
+               [0, 0, 0, 0, 0],
+               [0, 0, 0, 0, 0],
+               [0, 0, 0, 0, 0],
+               [0, 0, 0, 0, 0]];
+
+const LETTERS_OF_WORD = 5;
+const CHANCES = 6;
+const GAP = 10;
+
+let r = 211;
+let g = 211;
+let b = 211;
+
+
+let cellSize = 50;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
 }
 
 function draw() {
-  background(220);
-  circle(mouseX, mouseY, 50);
+  background(255);
+  showGrid();
+}
+
+function showGrid() {
+  for (let y = 0; y < CHANCES; y++) {
+    for (let x = 0; x < LETTERS_OF_WORD; x++) {
+      if (theGrid[y][x] === 0) {
+        strokeWeight(2);
+        stroke(r, g, b);
+        fill("white");
+        square(windowWidth/2 - LETTERS_OF_WORD * cellSize / 2 + x * (cellSize + GAP), 5 * GAP + y * (cellSize + GAP), cellSize);
+      }
+    }
+  }
 }
