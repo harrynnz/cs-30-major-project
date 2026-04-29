@@ -14,6 +14,8 @@ Similar to the game Wordle, where you have to guess what 5-letters word is corre
 -Have atleast 5 words in word bank.
 
 -"Acceptable" UI.
+
+-Sound effects when pressing a key.
 ## Nice to Have
 -Grid rotate animation.
 
