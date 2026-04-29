@@ -14,6 +14,7 @@ const COLS = 6;
 const GAP = 10;
 
 let typedLetters = [];
+let chosenWord = [];
 
 let r = 211;
 let g = 211;
@@ -26,6 +27,8 @@ let cellSize = 50;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+  choseRandomWord();
+  console.log(chosenWord);
 }
 
 function draw() {
@@ -33,7 +36,11 @@ function draw() {
   showGrid();
 }
 
+
+//Display 5x6 grid
 function showGrid() {
+  let chances = 6;
+  let currentRow = 0;
   for (let y = 0; y < COLS; y++) {
     for (let x = 0; x < LETTERS_PER_ROW; x++) {
       if (theGrid[y][x] === 0) {
@@ -48,8 +55,8 @@ function showGrid() {
 
 
 function keyTyped() {
-  let chances = 0;
-  let currentRow = 0;
+  
+  //Push typed letters into array
   if (typedLetters.length < LETTERS_PER_ROW && keyCode >= 65 && keyCode <= 90) {
     typedLetters.push(key);
     console.log(typedLetters);
@@ -57,7 +64,30 @@ function keyTyped() {
 }
 
 function keyPressed() {
-  if (typedLetters.length > 0 && keyCode === 8) {
-    erase();
+  if (typedLetters.length > 0 && keyCode === BACKSPACE) {
+    typedLetters.splice(typedLetters.length - 1, 1);
+    console.log(typedLetters);
   }
+  if (typedLetters.length === 5 && keyCode === ENTER) {
+    for (let i = 0; i <= LETTERS_PER_ROW; i++) {
+
+      //Check if the player got the word correct
+      if (typedLetters[i] === chosenWord[i]) {
+        //Congrat and sound
+
+      }
+
+      //Check for each letter that is correct
+      for (let j = 0; j <= LETTERS_PER_ROW; j++) {
+        if (typedLetters[i] === chosenWord[j]) {
+          //Notify player which letter is correct or wrong
+
+        }
+      }
+    }
+  }
+}
+
+function choseRandomWord() {
+  chosenWord = split(random(listOfWords), '');
 }
