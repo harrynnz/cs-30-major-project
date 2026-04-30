@@ -3,11 +3,12 @@
 //
 
 let theGrid = [[0, 0, 0, 0, 0],
-               [0, 0, 0, 0, 0],
-               [0, 0, 0, 0, 0],
-               [0, 0, 0, 0, 0],
-               [0, 0, 0, 0, 0],
-               [0, 0, 0, 0, 0]];
+                    [0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0]];
+
 
 const LETTERS_PER_ROW = 5;
 const COLS = 6;
@@ -20,8 +21,10 @@ let r = 211;
 let g = 211;
 let b = 211;
 
+let chances = 0;
 
-let listOfWords = ["wrong", "prism", "quest", "table", "chair", "heart", "teeth", "black", "cloud", "fruit", "fence", "happy", "paint", "shirt", "sleep", "pizza", "honey", "block", "light", "water", "green"]
+
+let listOfWords = ["shard", "prism", "eager", "plain", "bulky", "steel", "dense", "cruel", "solid", "tense", "fence", "chart", "paint", "rural", "baste", "gofer", "rower", "krill", "wafer", "savvy", "wound"]
 
 let cellSize = 50;
 
@@ -39,10 +42,8 @@ function draw() {
 
 //Display 5x6 grid
 function showGrid() {
-  let chances = 6;
-  let currentRow = 0;
-  for (let y = 0; y < COLS; y++) {
-    for (let x = 0; x < LETTERS_PER_ROW; x++) {
+  for (let y = 0; y <= COLS; y++) {
+    for (let x = 0; x <= LETTERS_PER_ROW; x++) {
       if (theGrid[y][x] === 0) {
         strokeWeight(2);
         stroke(r, g, b);
@@ -52,6 +53,7 @@ function showGrid() {
     }
   }
 }
+
 
 
 function keyTyped() {
@@ -64,12 +66,22 @@ function keyTyped() {
 }
 
 function keyPressed() {
+
+  //Delete a typed letter in array by pressing BACKSPACE
   if (typedLetters.length > 0 && keyCode === BACKSPACE) {
     typedLetters.splice(typedLetters.length - 1, 1);
     console.log(typedLetters);
   }
+
+  //Check the typed word by pressing ENTER
   if (typedLetters.length === 5 && keyCode === ENTER) {
+
+    //Increase chances so that the next typed letters/word would be in the below row
+    chances += 1;
+
+    //Check for indentical word/letters
     for (let i = 0; i <= LETTERS_PER_ROW; i++) {
+    //Divided into 2 cases
 
       //Check if the player got the word correct
       if (typedLetters[i] === chosenWord[i]) {
