@@ -11,11 +11,11 @@ let blankGrid = [[0, 0, 0, 0, 0],
 
 
 let lettersGrid = [[0, 0, 0, 0, 0],
-               [0, 0, 0, 0, 0],
-               [0, 0, 0, 0, 0],
-               [0, 0, 0, 0, 0],
-               [0, 0, 0, 0, 0],
-               [0, 0, 0, 0, 0]];
+                   [0, 0, 0, 0, 0],
+                   [0, 0, 0, 0, 0],
+                   [0, 0, 0, 0, 0],
+                   [0, 0, 0, 0, 0],
+                   [0, 0, 0, 0, 0]];
 
 
 const LETTERS_PER_ROW = 5;
@@ -47,7 +47,7 @@ function draw() {
   background(255);
   showBlankGrid();
   showLettersGrid();
-  console.log(LettersGrid);
+  console.log(lettersGrid);
 }
 
 
@@ -82,15 +82,24 @@ function showLettersGrid() {
 
 function keyTyped() {
   
-  //Push typed letters into array
+  //Push typed letters into an array
   if (typedLetters.length < LETTERS_PER_ROW && keyCode >= 65 && keyCode <= 90) {
     typedLetters.push(key);
+    lettersGrid[currentCols][currentLetter] = keyCode;
     currentLetter += 1;
     console.log(typedLetters);
   }
 }
 
 function keyPressed() {
+
+  //Push key into letter grid
+  // if (currentCols < COLS) {
+  //   if (typedLetters.length < LETTERS_PER_ROW && keyCode >= 65 && keyCode <= 90) {
+  //     lettersGrid[currentCols][currentLetter] = keyCode;
+      console.log(lettersGrid);
+  //   }
+  // }
 
   //Delete a typed letter in array by pressing BACKSPACE
   if (typedLetters.length > 0 && keyCode === BACKSPACE) {
@@ -99,9 +108,13 @@ function keyPressed() {
   }
 
   //Check the typed word by pressing ENTER
-  if (typedLetters.length === 5 && keyCode === ENTER) {
-    //Increase chances so that the next typed letters/word would be in the below row
-    currentCols += 1;
+  if (currentCols < COLS) {
+    if (typedLetters.length === 5 && keyCode === ENTER) {
+      //Move to the next/below row
+      currentCols += 1;
+      currentLetter = 0;
+      typedLetters.length = 0;
+    }
 
     //Check for indentical word/letters
     for (let i = 0; i <= LETTERS_PER_ROW; i++) {
@@ -125,5 +138,6 @@ function keyPressed() {
 }
 
 function choseRandomWord() {
+  //Chose random word from word list and splice it into 5 single letters
   chosenWord = split(random(listOfWords), '');
 }
