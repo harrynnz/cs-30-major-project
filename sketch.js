@@ -10,12 +10,7 @@ let blankGrid = [[0, 0, 0, 0, 0],
                [0, 0, 0, 0, 0]];
 
 
-let lettersGrid = [[0, 0, 0, 0, 0],
-                   [0, 0, 0, 0, 0],
-                   [0, 0, 0, 0, 0],
-                   [0, 0, 0, 0, 0],
-                   [0, 0, 0, 0, 0],
-                   [0, 0, 0, 0, 0]];
+let lettersGrid = [];
 
 
 const LETTERS_PER_ROW = 5;
@@ -24,6 +19,7 @@ const GAP = 10;
 
 let typedLetters = [];
 let chosenWord = [];
+let joinedTypedLetters = [];
 
 let r = 211;
 let g = 211;
@@ -66,17 +62,14 @@ function showBlankGrid() {
 }
 
 function showLettersGrid() {
-  for (let y = 0; y <= COLS; y++) {
-    for (let x = 0; x <= LETTERS_PER_ROW; x++) {
-      if (currentCols < COLS) {
-        strokeWeight(2);
-        stroke(r, g, b);
-        fill("white");
-        text(typedLetters[currentLetter],windowWidth/2 - LETTERS_PER_ROW * cellSize / 2 + x * (cellSize + GAP), 5 * GAP + y * (cellSize + GAP), cellSize);
-      }
-    }
+  if (currentCols < COLS) {
+    strokeWeight(2);
+    stroke(r, g, b);
+    fill("white");
+    text(lettersGrid[currentCols][currentLetter],windowWidth/2 - LETTERS_PER_ROW * cellSize / 2 + currentLetter * (cellSize + GAP), 5 * GAP + currentCols * (cellSize + GAP), cellSize);
   }
 }
+
 
 
 
@@ -84,9 +77,10 @@ function keyTyped() {
   
   //Push typed letters into an array
   if (typedLetters.length < LETTERS_PER_ROW && keyCode >= 65 && keyCode <= 90) {
+
     typedLetters.push(key);
-    lettersGrid[currentCols][currentLetter] = keyCode;
-    currentLetter += 1;
+    // lettersGrid[currentCols][currentLetter] = keyCode;
+    // currentLetter += 1;
     console.log(typedLetters);
   }
 }
@@ -97,7 +91,7 @@ function keyPressed() {
   // if (currentCols < COLS) {
   //   if (typedLetters.length < LETTERS_PER_ROW && keyCode >= 65 && keyCode <= 90) {
   //     lettersGrid[currentCols][currentLetter] = keyCode;
-      console.log(lettersGrid);
+  console.log(lettersGrid);
   //   }
   // }
 
@@ -110,6 +104,8 @@ function keyPressed() {
   //Check the typed word by pressing ENTER
   if (currentCols < COLS) {
     if (typedLetters.length === 5 && keyCode === ENTER) {
+      joinedTypedLetters = join(typedLetters, "");
+      lettersGrid.push(joinedTypedLetters);
       //Move to the next/below row
       currentCols += 1;
       currentLetter = 0;
