@@ -20,6 +20,9 @@ const GAP = 10;
 let typedLetters = [];
 let chosenWord = [];
 let joinedTypedLetters = [];
+let ifCorrect = false;
+let win = false;
+let temp = "";
 
 let r = 211;
 let g = 211;
@@ -62,17 +65,18 @@ function showBlankGrid() {
 }
 
 function showLettersGrid() {
-  if (currentCols < COLS) {
-    strokeWeight(2);
-    stroke(r, g, b);
-    fill("white");
-    text(lettersGrid[currentCols][currentLetter],windowWidth/2 - LETTERS_PER_ROW * cellSize / 2 + currentLetter * (cellSize + GAP), 5 * GAP + currentCols * (cellSize + GAP), cellSize);
+  for (let y = 0; y <= COLS; y++) {
+    for (let x = 0; x <= LETTERS_PER_ROW; x++) {
+      let temp = lettersGrid[y][x]
+      strokeWeight(10);
+      fill("white");
+      text(temp, windowWidth/2 - LETTERS_PER_ROW * cellSize / 2 + currentLetter * (cellSize + GAP), 5 * GAP + currentCols * (cellSize + GAP), cellSize);
+    }
   }
 }
 
 
-
-
+//Input letters
 function keyTyped() {
   
   //Push typed letters into an array
@@ -91,7 +95,7 @@ function keyPressed() {
   // if (currentCols < COLS) {
   //   if (typedLetters.length < LETTERS_PER_ROW && keyCode >= 65 && keyCode <= 90) {
   //     lettersGrid[currentCols][currentLetter] = keyCode;
-  console.log(lettersGrid);
+  // console.log(lettersGrid);
   //   }
   // }
 
@@ -101,39 +105,66 @@ function keyPressed() {
     console.log(typedLetters);
   }
 
-  //Check the typed word by pressing ENTER
+//Check the typed word by pressing ENTER
+  //If current column is less than 6 (maximum tries u can get)
   if (currentCols < COLS) {
-    if (typedLetters.length === 5 && keyCode === ENTER) {
+
+    //If typed word has 5 letters and you press ENTER
+    if (typedLetters.length === LETTERS_PER_ROW && keyCode === ENTER) {
+      
+      //Join each letters from "typedLetters" into new variable "joinedTypedLetters" to form a string
       joinedTypedLetters = join(typedLetters, "");
+
+      //Push the word that just got joined together into grid ("lettersGrid")
       lettersGrid.push(joinedTypedLetters);
+
+      //If got word correct then change state of win variable
+      if (ifCorrect === true) {
+        win = true;
+        return win;
+      }
+
       //Move to the next/below row
       currentCols += 1;
       currentLetter = 0;
+
+      //Reset typedLetters
       typedLetters.length = 0;
+      console.log(lettersGrid);
+      console.log(temp);
     }
 
+  //If the typed word is not correct then grid will change color under few conditions
     //Check for indentical word/letters
     for (let i = 0; i <= LETTERS_PER_ROW; i++) {
-    //Divided into 2 cases
-
-      //Check if the player got the word correct
       if (typedLetters[i] === chosenWord[i]) {
-        //Congrat and sound
+        //Notify player which letter is correct or wrong
 
-      }
-
-      //Check for each letter that is correct
-      for (let j = 0; j <= LETTERS_PER_ROW; j++) {
-        if (typedLetters[i] === chosenWord[j]) {
-          //Notify player which letter is correct or wrong
-
-        }
       }
     }
   }
 }
 
+
 function choseRandomWord() {
   //Chose random word from word list and splice it into 5 single letters
   chosenWord = split(random(listOfWords), '');
+}
+
+function checkCorrect() {
+  let correctLetters;
+  for (let y = 0; x > currentCols; y++) {
+    for (let x = 0; y > currentLetter; x++) {
+      let wordSplit = split(lettersGrid[y][x]);
+      if (wordSplit[y][x] === typedLetters[x]) {
+        correctLetters++;
+      }
+    }
+  }
+  if (correctLetters === 5) {
+    ifCorrect = true;
+  }
+  else {
+    ifCorrect = false;
+  }
 }
