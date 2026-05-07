@@ -3,11 +3,11 @@
 //
 
 let blankGrid = [[0, 0, 0, 0, 0],
-               [0, 0, 0, 0, 0],
-               [0, 0, 0, 0, 0],
-               [0, 0, 0, 0, 0],
-               [0, 0, 0, 0, 0],
-               [0, 0, 0, 0, 0]];
+                 [0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0]];
 
 
 let lettersGrid = [];
@@ -22,7 +22,7 @@ let chosenWord = [];
 let joinedTypedLetters = [];
 let ifCorrect = false;
 let win = false;
-let temp = "";
+
 
 let r = 211;
 let g = 211;
@@ -47,13 +47,16 @@ function draw() {
   showBlankGrid();
   showLettersGrid();
   console.log(lettersGrid);
+  textSize(32);
+  fill("black");
+  text(listOfWords[2], 50, 50);
 }
 
 
 //Display 5x6 grid
 function showBlankGrid() {
-  for (let y = 0; y <= COLS; y++) {
-    for (let x = 0; x <= LETTERS_PER_ROW; x++) {
+  for (let y = 0; y < COLS; y++) {
+    for (let x = 0; x < LETTERS_PER_ROW; x++) {
       if (blankGrid[y][x] === 0) {
         strokeWeight(2);
         stroke(r, g, b);
@@ -65,6 +68,7 @@ function showBlankGrid() {
 }
 
 function showLettersGrid() {
+  textSize(32);
   for (let y = 0; y <= COLS; y++) {
     for (let x = 0; x <= LETTERS_PER_ROW; x++) {
       let temp = lettersGrid[y][x]
@@ -116,7 +120,7 @@ function keyPressed() {
       joinedTypedLetters = join(typedLetters, "");
 
       //Push the word that just got joined together into grid ("lettersGrid")
-      lettersGrid.push(joinedTypedLetters);
+      lettersGrid.push([...joinedTypedLetters]);
 
       //If got word correct then change state of win variable
       if (ifCorrect === true) {
