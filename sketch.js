@@ -22,6 +22,7 @@ let chosenWord = [];
 let joinedTypedLetters = [];
 let ifCorrect = false;
 let win = false;
+let temp;
 
 
 let r = 211;
@@ -71,7 +72,7 @@ function showLettersGrid() {
   textSize(32);
   for (let y = 0; y <= COLS; y++) {
     for (let x = 0; x <= LETTERS_PER_ROW; x++) {
-      let temp = lettersGrid[y][x]
+      temp = lettersGrid[y][x];
       strokeWeight(10);
       fill("white");
       text(temp, windowWidth/2 - LETTERS_PER_ROW * cellSize / 2 + currentLetter * (cellSize + GAP), 5 * GAP + currentCols * (cellSize + GAP), cellSize);
