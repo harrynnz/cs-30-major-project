@@ -18,10 +18,12 @@ const COLS = 6;
 const GAP = 10;
 
 let typedLetters = [];
+
 let chosenWord = [];
-let joinedTypedLetters = [];
+
 let ifCorrect = false;
 let win = false;
+let lose = false;
 let temp;
 
 
@@ -46,11 +48,9 @@ function setup() {
 function draw() {
   background(255);
   showBlankGrid();
-  showLettersGrid();
-  console.log(lettersGrid);
   textSize(32);
   fill("black");
-  text(listOfWords[2], 50, 50);
+  drawCurrentWord();
 }
 
 
@@ -68,19 +68,6 @@ function showBlankGrid() {
   }
 }
 
-function showLettersGrid() {
-  textSize(32);
-  for (let y = 0; y <= COLS; y++) {
-    for (let x = 0; x <= LETTERS_PER_ROW; x++) {
-      temp = lettersGrid[y][x];
-      strokeWeight(10);
-      fill("white");
-      text(temp, windowWidth/2 - LETTERS_PER_ROW * cellSize / 2 + currentLetter * (cellSize + GAP), 5 * GAP + currentCols * (cellSize + GAP), cellSize);
-    }
-  }
-}
-
-
 //Input letters
 function keyTyped() {
   
@@ -88,21 +75,12 @@ function keyTyped() {
   if (typedLetters.length < LETTERS_PER_ROW && keyCode >= 65 && keyCode <= 90) {
 
     typedLetters.push(key);
-    // lettersGrid[currentCols][currentLetter] = keyCode;
-    // currentLetter += 1;
+
     console.log(typedLetters);
   }
 }
 
 function keyPressed() {
-
-  //Push key into letter grid
-  // if (currentCols < COLS) {
-  //   if (typedLetters.length < LETTERS_PER_ROW && keyCode >= 65 && keyCode <= 90) {
-  //     lettersGrid[currentCols][currentLetter] = keyCode;
-  // console.log(lettersGrid);
-  //   }
-  // }
 
   //Delete a typed letter in array by pressing BACKSPACE
   if (typedLetters.length > 0 && keyCode === BACKSPACE) {
@@ -111,23 +89,17 @@ function keyPressed() {
   }
 
 //Check the typed word by pressing ENTER
-  //If current column is less than 6 (maximum tries u can get)
+  //If current column is less than 6 
   if (currentCols < COLS) {
+
+    //Check if word is correct
+    checkCorrect();
 
     //If typed word has 5 letters and you press ENTER
     if (typedLetters.length === LETTERS_PER_ROW && keyCode === ENTER) {
-      
-      //Join each letters from "typedLetters" into new variable "joinedTypedLetters" to form a string
-      joinedTypedLetters = join(typedLetters, "");
 
       //Push the word that just got joined together into grid ("lettersGrid")
-      lettersGrid.push([...joinedTypedLetters]);
-
-      //If got word correct then change state of win variable
-      if (ifCorrect === true) {
-        win = true;
-        return win;
-      }
+      lettersGrid.push([typedLetters]);
 
       //Move to the next/below row
       currentCols += 1;
@@ -136,7 +108,6 @@ function keyPressed() {
       //Reset typedLetters
       typedLetters.length = 0;
       console.log(lettersGrid);
-      console.log(temp);
     }
 
   //If the typed word is not correct then grid will change color under few conditions
@@ -152,24 +123,37 @@ function keyPressed() {
 
 
 function choseRandomWord() {
-  //Chose random word from word list and splice it into 5 single letters
+
+  //Chose random word from word list (and splice it into 5 single letters for checking)
   chosenWord = split(random(listOfWords), '');
 }
 
 function checkCorrect() {
-  let correctLetters;
-  for (let y = 0; x > currentCols; y++) {
-    for (let x = 0; y > currentLetter; x++) {
-      let wordSplit = split(lettersGrid[y][x]);
-      if (wordSplit[y][x] === typedLetters[x]) {
-        correctLetters++;
-      }
+  let correctLetters = 0;
+
+  for (let i = 0; i < LETTERS_PER_ROW; i++) {
+    if (typedLetters[i] === chosenWord[i]) {
+      correctLetters++;
     }
   }
-  if (correctLetters === 5) {
+  if (correctLetters === LETTERS_PER_ROW) {
     ifCorrect = true;
   }
-  else {
-    ifCorrect = false;
+}
+
+
+function drawCurrentWord() {
+  textSize(32);
+  fill("black");
+  textAlign(CENTER, CENTER);
+
+  //Display letters into grid
+  for (let i = 0; i < typedLetters.length; i++) {
+
+    let posX = windowWidth / 2 - LETTERS_PER_ROW * cellSize / 2 + i * (cellSize + GAP) + cellSize / 2;
+    let posY = 5 * GAP + currentCols * (cellSize + GAP) + cellSize / 2;
+
+    square(windowWidth/2 - LETTERS_PER_ROW * cellSize / 2 + x * (cellSize + GAP));
+    text(typedLetters[i].toUpperCase(), posX, posY);
   }
 }
