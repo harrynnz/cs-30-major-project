@@ -21,7 +21,6 @@ let typedLetters = [];
 
 let chosenWord = [];
 
-let ifCorrect = false;
 let win = false;
 let lose = false;
 let temp;
@@ -58,27 +57,29 @@ function draw() {
 function showBlankGrid() {
   for (let y = 0; y < COLS; y++) {
     for (let x = 0; x < LETTERS_PER_ROW; x++) {
-      if (blankGrid[y][x] === 0) {
-        strokeWeight(2);
-        stroke(r, g, b);
-        fill("white");
-        square(windowWidth/2 - LETTERS_PER_ROW * cellSize / 2 + x * (cellSize + GAP), 5 * GAP + y * (cellSize + GAP), cellSize);
-      }
+      strokeWeight(2);
+      stroke(r, g, b);
+      fill("white");
+      square(windowWidth/2 - LETTERS_PER_ROW * cellSize / 2 + x * (cellSize + GAP), 5 * GAP + y * (cellSize + GAP), cellSize);
     }
   }
 }
+
 
 //Input letters
 function keyTyped() {
   
   //Push typed letters into an array
-  if (typedLetters.length < LETTERS_PER_ROW && keyCode >= 65 && keyCode <= 90) {
-
+  if (keyCode >= 65 && keyCode <= 90) {
     typedLetters.push(key);
-
-    console.log(typedLetters);
+    for (let i = 0; i < LETTERS_PER_ROW; i++) {
+      blankGrid[currentCols][i] = typedLetters[i];
+    }
   }
+
+  console.log(typedLetters);
 }
+
 
 function keyPressed() {
 
@@ -106,7 +107,7 @@ function keyPressed() {
       currentLetter = 0;
 
       //Reset typedLetters
-      typedLetters.length = 0;
+      // typedLetters.length = 0;
       console.log(lettersGrid);
     }
 
@@ -137,7 +138,7 @@ function checkCorrect() {
     }
   }
   if (correctLetters === LETTERS_PER_ROW) {
-    ifCorrect = true;
+    win = true;
   }
 }
 
@@ -153,7 +154,7 @@ function drawCurrentWord() {
     let posX = windowWidth / 2 - LETTERS_PER_ROW * cellSize / 2 + i * (cellSize + GAP) + cellSize / 2;
     let posY = 5 * GAP + currentCols * (cellSize + GAP) + cellSize / 2;
 
-    square(windowWidth/2 - LETTERS_PER_ROW * cellSize / 2 + x * (cellSize + GAP));
-    text(typedLetters[i].toUpperCase(), posX, posY);
+    text(typedLetters[i].toUpperCase(), posX, posY );
   }
 }
+
