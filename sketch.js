@@ -10,8 +10,6 @@ let blankGrid = [[0, 0, 0, 0, 0],
                  [0, 0, 0, 0, 0]];
 
 
-let lettersGrid = [];
-
 
 const LETTERS_PER_ROW = 5;
 const COLS = 6;
@@ -23,7 +21,6 @@ let chosenWord = [];
 
 let win = false;
 let lose = false;
-let temp;
 
 
 let r = 211;
@@ -49,7 +46,7 @@ function draw() {
   showBlankGrid();
   textSize(32);
   fill("black");
-  drawCurrentWord();
+  // drawCurrentWord();
 }
 
 
@@ -57,10 +54,19 @@ function draw() {
 function showBlankGrid() {
   for (let y = 0; y < COLS; y++) {
     for (let x = 0; x < LETTERS_PER_ROW; x++) {
+
+      let posX = windowWidth / 2 - LETTERS_PER_ROW * cellSize / 2 + x * (cellSize + GAP) + cellSize / 2;
+      let posY = 5 * GAP + currentCols * (cellSize + GAP) + cellSize / 2;
+
+
       strokeWeight(2);
       stroke(r, g, b);
       fill("white");
       square(windowWidth/2 - LETTERS_PER_ROW * cellSize / 2 + x * (cellSize + GAP), 5 * GAP + y * (cellSize + GAP), cellSize);
+
+      if (isLetter(blankGrid[y][x]) === true){
+        text(blankGrid[y][x], posX, posY );
+      }
     }
   }
 }
@@ -69,14 +75,13 @@ function showBlankGrid() {
 //Input letters
 function keyTyped() {
   
-  //Push typed letters into an array
-  if (keyCode >= 65 && keyCode <= 90) {
+  if (keyCode >= 65 && keyCode <= 90 && typedLetters.length < 5) {
     typedLetters.push(key);
-    for (let i = 0; i < LETTERS_PER_ROW; i++) {
-      blankGrid[currentCols][i] = typedLetters[i];
-    }
-  }
 
+    blankGrid[currentCols][currentLetter] = typedLetters[currentLetter];
+
+    currentLetter++;
+  }
   console.log(typedLetters);
 }
 
@@ -89,43 +94,28 @@ function keyPressed() {
     console.log(typedLetters);
   }
 
-//Check the typed word by pressing ENTER
-  //If current column is less than 6 
   if (currentCols < COLS) {
 
-    //Check if word is correct
     checkCorrect();
-
-    //If typed word has 5 letters and you press ENTER
     if (typedLetters.length === LETTERS_PER_ROW && keyCode === ENTER) {
 
-      //Push the word that just got joined together into grid ("lettersGrid")
-      lettersGrid.push([typedLetters]);
+      for (let i = 0; i <= LETTERS_PER_ROW; i++) {
+        if (key !== undefined) {
+          blankGrid[currentCols][i] === typedLetters[i];
+        }
+      }
+      typedLetters.length = 0;
 
-      //Move to the next/below row
       currentCols += 1;
       currentLetter = 0;
 
-      //Reset typedLetters
-      // typedLetters.length = 0;
-      console.log(lettersGrid);
-    }
-
-  //If the typed word is not correct then grid will change color under few conditions
-    //Check for indentical word/letters
-    for (let i = 0; i <= LETTERS_PER_ROW; i++) {
-      if (typedLetters[i] === chosenWord[i]) {
-        //Notify player which letter is correct or wrong
-
-      }
+      console.log(blankGrid);
     }
   }
 }
 
 
 function choseRandomWord() {
-
-  //Chose random word from word list (and splice it into 5 single letters for checking)
   chosenWord = split(random(listOfWords), '');
 }
 
@@ -143,18 +133,18 @@ function checkCorrect() {
 }
 
 
-function drawCurrentWord() {
-  textSize(32);
-  fill("black");
-  textAlign(CENTER, CENTER);
+// function drawCurrentWord() {
+//   textSize(32);
+//   fill("black");
+//   textAlign(CENTER, CENTER);
 
-  //Display letters into grid
-  for (let i = 0; i < typedLetters.length; i++) {
+//   //Display letters into grid
+//   for (let i = 0; i < typedLetters.length; i++) {
 
-    let posX = windowWidth / 2 - LETTERS_PER_ROW * cellSize / 2 + i * (cellSize + GAP) + cellSize / 2;
-    let posY = 5 * GAP + currentCols * (cellSize + GAP) + cellSize / 2;
+//     let posX = windowWidth / 2 - LETTERS_PER_ROW * cellSize / 2 + i * (cellSize + GAP) + cellSize / 2;
+//     let posY = 5 * GAP + currentCols * (cellSize + GAP) + cellSize / 2;
 
-    text(typedLetters[i].toUpperCase(), posX, posY );
-  }
-}
+//     text(blankGrid[currentCols][i].toUpperCase(), posX, posY );
+//   }
+// }
 
