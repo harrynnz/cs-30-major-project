@@ -14,9 +14,10 @@ let blankGrid = [[0, 0, 0, 0, 0],
 const LETTERS_PER_ROW = 5;
 const COLS = 6;
 const GAP = 10;
+let cellSize = 50;
 
+let lettersGrid = [];
 let typedLetters = [];
-
 let chosenWord = [];
 
 let win = false;
@@ -29,11 +30,13 @@ let b = 211;
 
 let currentCols = 0;
 let currentLetter = 0;
+let startP = 0;
+let maxP = 0;
 
 
 let listOfWords = ["shard", "prism", "eager", "plain", "bulky", "steel", "dense", "cruel", "solid", "tense", "fence", "chart", "paint", "rural", "baste", "gofer", "rower", "krill", "wafer", "savvy", "wound"]
 
-let cellSize = 50;
+
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -46,7 +49,8 @@ function draw() {
   showBlankGrid();
   textSize(32);
   fill("black");
-  // drawCurrentWord();
+  showCurrentWord();
+  showLettersGrid();
 }
 
 
@@ -54,19 +58,18 @@ function draw() {
 function showBlankGrid() {
   for (let y = 0; y < COLS; y++) {
     for (let x = 0; x < LETTERS_PER_ROW; x++) {
-
-      let posX = windowWidth / 2 - LETTERS_PER_ROW * cellSize / 2 + x * (cellSize + GAP) + cellSize / 2;
-      let posY = 5 * GAP + currentCols * (cellSize + GAP) + cellSize / 2;
-
-
       strokeWeight(2);
       stroke(r, g, b);
       fill("white");
       square(windowWidth/2 - LETTERS_PER_ROW * cellSize / 2 + x * (cellSize + GAP), 5 * GAP + y * (cellSize + GAP), cellSize);
+    }
+  }
+}
 
-      if (isLetter(blankGrid[y][x]) === true){
-        text(blankGrid[y][x], posX, posY );
-      }
+function showLettersGrid() {
+  for (let rows = 0; rows < 6; rows++) {
+    for (let x = startP; x < maxP; x++) {
+      text(lettersGrid[rows][x], windowWidth/2 - LETTERS_PER_ROW * cellSize / 2 + x * (cellSize + GAP), 5 * GAP + y * (cellSize + GAP), cellSize)
     }
   }
 }
@@ -77,10 +80,6 @@ function keyTyped() {
   
   if (keyCode >= 65 && keyCode <= 90 && typedLetters.length < 5) {
     typedLetters.push(key);
-
-    blankGrid[currentCols][currentLetter] = typedLetters[currentLetter];
-
-    currentLetter++;
   }
   console.log(typedLetters);
 }
@@ -98,18 +97,15 @@ function keyPressed() {
 
     checkCorrect();
     if (typedLetters.length === LETTERS_PER_ROW && keyCode === ENTER) {
-
-      for (let i = 0; i <= LETTERS_PER_ROW; i++) {
-        if (key !== undefined) {
-          blankGrid[currentCols][i] === typedLetters[i];
-        }
-      }
-      typedLetters.length = 0;
+      lettersGrid.push(typedLetters);
 
       currentCols += 1;
       currentLetter = 0;
+      maxP += 5;
+      startP += 5;
+      typedLetters.length = 0;
 
-      console.log(blankGrid);
+      console.log(lettersGrid);
     }
   }
 }
@@ -133,18 +129,18 @@ function checkCorrect() {
 }
 
 
-// function drawCurrentWord() {
-//   textSize(32);
-//   fill("black");
-//   textAlign(CENTER, CENTER);
+function showCurrentWord() {
+  textSize(32);
+  fill("black");
+  textAlign(CENTER, CENTER);
 
-//   //Display letters into grid
-//   for (let i = 0; i < typedLetters.length; i++) {
+  //Display letters into grid
+  for (let i = 0; i < typedLetters.length; i++) {
 
-//     let posX = windowWidth / 2 - LETTERS_PER_ROW * cellSize / 2 + i * (cellSize + GAP) + cellSize / 2;
-//     let posY = 5 * GAP + currentCols * (cellSize + GAP) + cellSize / 2;
+    let posX = windowWidth / 2 - LETTERS_PER_ROW * cellSize / 2 + i * (cellSize + GAP) + cellSize / 2;
+    let posY = 5 * GAP + currentCols * (cellSize + GAP) + cellSize / 2;
 
-//     text(blankGrid[currentCols][i].toUpperCase(), posX, posY );
-//   }
-// }
+    text(typedLetters[i].toUpperCase(), posX, posY );
+  }
+}
 
