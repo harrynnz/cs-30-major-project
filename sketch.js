@@ -10,15 +10,23 @@ let blankGrid = [[0, 0, 0, 0, 0],
                  [0, 0, 0, 0, 0]];
 
 
+let lettersGrid = [[0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0]];
+
+
 
 const LETTERS_PER_ROW = 5;
 const COLS = 6;
 const GAP = 10;
 let cellSize = 50;
 
-let lettersGrid = [];
 let typedLetters = [];
 let chosenWord = [];
+
 
 let win = false;
 let lose = false;
@@ -30,8 +38,6 @@ let b = 211;
 
 let currentCols = 0;
 let currentLetter = 0;
-let startP = 0;
-let maxP = 0;
 
 
 let listOfWords = ["shard", "prism", "eager", "plain", "bulky", "steel", "dense", "cruel", "solid", "tense", "fence", "chart", "paint", "rural", "baste", "gofer", "rower", "krill", "wafer", "savvy", "wound"]
@@ -67,13 +73,26 @@ function showBlankGrid() {
 }
 
 function showLettersGrid() {
-  for (let rows = 0; rows < 6; rows++) {
-    for (let x = startP; x < maxP; x++) {
-      text(lettersGrid[rows][x], windowWidth/2 - LETTERS_PER_ROW * cellSize / 2 + x * (cellSize + GAP), 5 * GAP + y * (cellSize + GAP), cellSize)
+  for (let y = 0; y < COLS; y++) {
+    for (let x = 0; x < LETTERS_PER_ROW; x++) {
+
+      let posX = windowWidth/2 - LETTERS_PER_ROW * cellSize / 2 + x * (cellSize + GAP);
+      let posY = 5 * GAP + y * (cellSize + GAP);
+
+      strokeWeight(2);
+      stroke(r, g, b);
+      fill("white");
+      square(posX, posY, cellSize);
+      if (lettersGrid[y][x] !== 0) {
+        //Display typed word
+        textSize(40);
+        fill("black");
+        textAlign(CENTER, CENTER);
+        text(lettersGrid[y][x].toUpperCase(), posX, posY + 28, cellSize );
+      }
     }
   }
 }
-
 
 //Input letters
 function keyTyped() {
@@ -97,12 +116,13 @@ function keyPressed() {
 
     checkCorrect();
     if (typedLetters.length === LETTERS_PER_ROW && keyCode === ENTER) {
-      lettersGrid.push(typedLetters);
+      for (let char = 0; char < typedLetters.length; char++) {
+        lettersGrid[currentCols][char] = typedLetters[char];
+      }
 
       currentCols += 1;
       currentLetter = 0;
-      maxP += 5;
-      startP += 5;
+
       typedLetters.length = 0;
 
       console.log(lettersGrid);
