@@ -2,13 +2,6 @@
 // Harry Huynh
 //
 
-let blankGrid = [[0, 0, 0, 0, 0],
-                 [0, 0, 0, 0, 0],
-                 [0, 0, 0, 0, 0],
-                 [0, 0, 0, 0, 0],
-                 [0, 0, 0, 0, 0],
-                 [0, 0, 0, 0, 0]];
-
 
 let lettersGrid = [[0, 0, 0, 0, 0],
                  [0, 0, 0, 0, 0],
@@ -29,7 +22,6 @@ let chosenWord = [];
 
 
 let win = false;
-let lose = false;
 
 
 let r = 211;
@@ -52,25 +44,15 @@ function setup() {
 
 function draw() {
   background(255);
-  showBlankGrid();
   textSize(32);
   fill("black");
-  showCurrentWord();
   showLettersGrid();
-}
-
-
-//Display 5x6 grid
-function showBlankGrid() {
-  for (let y = 0; y < COLS; y++) {
-    for (let x = 0; x < LETTERS_PER_ROW; x++) {
-      strokeWeight(2);
-      stroke(r, g, b);
-      fill("white");
-      square(windowWidth/2 - LETTERS_PER_ROW * cellSize / 2 + x * (cellSize + GAP), 5 * GAP + y * (cellSize + GAP), cellSize);
-    }
+  showCurrentWord();
+  if (win === true) {
+    noLoop();
   }
 }
+
 
 function showLettersGrid() {
   for (let y = 0; y < COLS; y++) {
@@ -84,6 +66,7 @@ function showLettersGrid() {
       fill("white");
       square(posX, posY, cellSize);
       if (lettersGrid[y][x] !== 0) {
+
         //Display typed word
         textSize(40);
         fill("black");
@@ -97,9 +80,10 @@ function showLettersGrid() {
 //Input letters
 function keyTyped() {
   
-  if (keyCode >= 65 && keyCode <= 90 && typedLetters.length < 5) {
+  if (keyCode >= 65 && keyCode <= 90 && typedLetters.length < 5 && currentCols < COLS) {
     typedLetters.push(key);
   }
+
   console.log(typedLetters);
 }
 
@@ -114,11 +98,11 @@ function keyPressed() {
 
   if (currentCols < COLS) {
 
-    checkCorrect();
     if (typedLetters.length === LETTERS_PER_ROW && keyCode === ENTER) {
       for (let char = 0; char < typedLetters.length; char++) {
         lettersGrid[currentCols][char] = typedLetters[char];
       }
+      checkCorrect();
 
       currentCols += 1;
       currentLetter = 0;
@@ -126,6 +110,7 @@ function keyPressed() {
       typedLetters.length = 0;
 
       console.log(lettersGrid);
+      console.log(win);
     }
   }
 }
@@ -139,7 +124,7 @@ function checkCorrect() {
   let correctLetters = 0;
 
   for (let i = 0; i < LETTERS_PER_ROW; i++) {
-    if (typedLetters[i] === chosenWord[i]) {
+    if (lettersGrid[currentCols][i] === chosenWord[i]) {
       correctLetters++;
     }
   }
@@ -150,17 +135,17 @@ function checkCorrect() {
 
 
 function showCurrentWord() {
-  textSize(32);
+  textSize(40);
   fill("black");
   textAlign(CENTER, CENTER);
 
   //Display letters into grid
   for (let i = 0; i < typedLetters.length; i++) {
 
-    let posX = windowWidth / 2 - LETTERS_PER_ROW * cellSize / 2 + i * (cellSize + GAP) + cellSize / 2;
+    let posX = windowWidth/2 - LETTERS_PER_ROW * cellSize / 2 + i * (cellSize + GAP);
     let posY = 5 * GAP + currentCols * (cellSize + GAP) + cellSize / 2;
 
-    text(typedLetters[i].toUpperCase(), posX, posY );
+    text(typedLetters[i].toUpperCase(), posX + 25, posY + 3 );
   }
 }
 
