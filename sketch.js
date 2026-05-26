@@ -48,10 +48,8 @@ function draw() {
   fill("black");
   showLettersGrid();
   showCurrentWord();
-  if (win === true) {
-    noLoop();
-  }
 }
+
 
 
 function showLettersGrid() {
@@ -66,12 +64,59 @@ function showLettersGrid() {
       fill("white");
       square(posX, posY, cellSize);
       if (lettersGrid[y][x] !== 0) {
+        if (lettersGrid[y][x] === chosenWord[x] && win === true) { //Case 0: All letters are correct
+          //Change grid color
+          strokeWeight(0);
+          stroke(0);
+          fill("green");
+          square(posX, posY, cellSize);
 
-        //Display typed word
-        textSize(40);
-        fill("black");
-        textAlign(CENTER, CENTER);
-        text(lettersGrid[y][x].toUpperCase(), posX, posY + 28, cellSize );
+          //Display letters
+          textSize(40);
+          fill("white");
+          textAlign(CENTER, CENTER);
+          text(lettersGrid[y][x].toUpperCase(), posX, posY + 28, cellSize );
+        }
+        else if (lettersGrid[y][x] === chosenWord[x] && win === false) { //Case 1: Some letters are correct
+          //Change grid color
+          strokeWeight(0);
+          stroke(0);
+          fill("green");
+          square(posX, posY, cellSize);
+
+          //Display letters
+          textSize(40);
+          fill("white");
+          textAlign(CENTER, CENTER);
+          text(lettersGrid[y][x].toUpperCase(), posX, posY + 28, cellSize );
+        }
+        else if (lettersGrid[y][x] === chosenWord[y]) { //Case 2: Correct letters but not in the right postition
+          //Change grid color
+          strokeWeight(0);
+          stroke(0);
+          fill("#eab308");
+          square(posX, posY, cellSize);
+
+          //Display letters
+          textSize(40);
+          fill("white");
+          textAlign(CENTER, CENTER);
+          text(lettersGrid[y][x].toUpperCase(), posX, posY + 28, cellSize );
+
+        }
+        else { //Case 3: Incorect letter
+          //Change grid color
+          strokeWeight(0);
+          stroke(0);
+          fill("grey");
+          square(posX, posY, cellSize);
+
+          //Display letters
+          textSize(40);
+          fill("white");
+          textAlign(CENTER, CENTER);
+          text(lettersGrid[y][x].toUpperCase(), posX, posY + 28, cellSize );
+        }
       }
     }
   }
