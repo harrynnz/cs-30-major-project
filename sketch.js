@@ -20,7 +20,6 @@ let cellSize = 50;
 let typedLetters = [];
 let chosenWord = [];
 
-
 let win = false;
 
 
@@ -193,4 +192,3 @@ function showCurrentWord() {
     text(typedLetters[i].toUpperCase(), posX + 25, posY + 3 );
   }
 }
-
