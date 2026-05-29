@@ -43,8 +43,9 @@ function setup() {
 
 function draw() {
   background(255);
-  textSize(32);
+  textSize(50);
   fill("black");
+  text("WORDLE", windowWidth / 2 + 25, 460);
   showLettersGrid();
   showCurrentWord();
 }
@@ -67,7 +68,7 @@ function showLettersGrid() {
           //Change grid color
           strokeWeight(0);
           stroke(0);
-          fill("green");
+          fill("#20a131");
           square(posX, posY, cellSize);
 
           //Display letters
@@ -80,7 +81,7 @@ function showLettersGrid() {
           //Change grid color
           strokeWeight(0);
           stroke(0);
-          fill("green");
+          fill("#20a131");
           square(posX, posY, cellSize);
 
           //Display letters
@@ -89,7 +90,7 @@ function showLettersGrid() {
           textAlign(CENTER, CENTER);
           text(lettersGrid[y][x].toUpperCase(), posX, posY + 28, cellSize );
         }
-        else if (lettersGrid[y][x] === chosenWord[y]) { //Case 2: Correct letters but not in the right postition
+        else if (chosenWord.includes(lettersGrid[y][x])) { //Case 2: Correct letters but not in the right postition
           //Change grid color
           strokeWeight(0);
           stroke(0);
