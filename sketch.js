@@ -48,6 +48,10 @@ function draw() {
   text("WORDLE", windowWidth / 2 + 25, 460);
   showLettersGrid();
   showCurrentWord();
+
+  if (win === true) {
+    noLoop();
+  }
 }
 
 
@@ -67,8 +71,8 @@ function showLettersGrid() {
         if (lettersGrid[y][x] === chosenWord[x] && win === true) { //Case 0: All letters are correct
           //Change grid color
           strokeWeight(0);
-          stroke(0);
-          fill("#20a131");
+          stroke(10);
+          fill("#15ad29");
           square(posX, posY, cellSize);
 
           //Display letters
@@ -94,7 +98,7 @@ function showLettersGrid() {
           //Change grid color
           strokeWeight(0);
           stroke(0);
-          fill("#eab308");
+          fill("#e9c456");
           square(posX, posY, cellSize);
 
           //Display letters
@@ -190,6 +194,7 @@ function showCurrentWord() {
     let posX = windowWidth/2 - LETTERS_PER_ROW * cellSize / 2 + i * (cellSize + GAP);
     let posY = 5 * GAP + currentCols * (cellSize + GAP) + cellSize / 2;
 
+    
     text(typedLetters[i].toUpperCase(), posX + 25, posY + 3 );
   }
 }
