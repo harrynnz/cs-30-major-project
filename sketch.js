@@ -20,7 +20,7 @@ let cellSize = 50;
 let typedLetters = [];
 let chosenWord = [];
 
-let win = false;
+let win;
 
 
 let r = 211;
@@ -33,12 +33,22 @@ let currentLetter = 0;
 
 let listOfWords = ["shard", "prism", "eager", "plain", "bulky", "steel", "dense", "cruel", "solid", "tense", "fence", "chart", "paint", "rural", "baste", "gofer", "rower", "krill", "wafer", "savvy", "wound"]
 
+let wrongSoundEffect;
+let correctSoundEffect;
+let pressingSoundEffect;
 
+
+function preload() {
+  wrongSoundEffect = loadSound('wrong-answer.mp3');
+  correctSoundEffect = loadSound('correct-answer.mp3');
+  pressingSoundEffect = loadSound('pressing-key.mp3');
+}
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   choseRandomWord();
   console.log(chosenWord);
+  
 }
 
 function draw() {
@@ -48,8 +58,12 @@ function draw() {
   text("WORDLE", windowWidth / 2 + 25, 460);
   showLettersGrid();
   showCurrentWord();
+  displayFRKeyboard();
+  displaySRKeyboard();
+  displayTRKeyboard();
 
   if (win === true) {
+
     noLoop();
   }
 }
@@ -87,12 +101,14 @@ function showLettersGrid() {
           stroke(0);
           fill("#20a131");
           square(posX, posY, cellSize);
+          
 
           //Display letters
           textSize(40);
           fill("white");
           textAlign(CENTER, CENTER);
           text(lettersGrid[y][x].toUpperCase(), posX, posY + 28, cellSize );
+
         }
         else if (chosenWord.includes(lettersGrid[y][x])) { //Case 2: Correct letters but not in the right postition
           //Change grid color
@@ -100,6 +116,7 @@ function showLettersGrid() {
           stroke(0);
           fill("#e9c456");
           square(posX, posY, cellSize);
+          
 
           //Display letters
           textSize(40);
@@ -120,6 +137,7 @@ function showLettersGrid() {
           fill("white");
           textAlign(CENTER, CENTER);
           text(lettersGrid[y][x].toUpperCase(), posX, posY + 28, cellSize );
+
         }
       }
     }
@@ -131,6 +149,7 @@ function keyTyped() {
   
   if (keyCode >= 65 && keyCode <= 90 && typedLetters.length < 5 && currentCols < COLS) {
     typedLetters.push(key);
+    pressingSoundEffect.play();
   }
 
   console.log(typedLetters);
@@ -152,6 +171,12 @@ function keyPressed() {
         lettersGrid[currentCols][char] = typedLetters[char];
       }
       checkCorrect();
+      if (win !== true) {
+        wrongSoundEffect.play();
+      }
+      else {
+        correctSoundEffect.play();
+      }
 
       currentCols += 1;
       currentLetter = 0;
@@ -197,4 +222,35 @@ function showCurrentWord() {
     
     text(typedLetters[i].toUpperCase(), posX + 25, posY + 3 );
   }
+}
+
+
+function displayFRKeyboard() {
+  for (let x = 0; x < 10; x++) {
+    strokeWeight(2);
+    stroke(r, g, b);
+    fill("#ccccca");
+    rect(windowWidth/2 - 10 * cellSize / 2 + x * (cellSize + GAP), windowHeight - 300, cellSize, 60, 5);
+  }
+}
+
+function displaySRKeyboard() {
+  for (let x = 0; x < 9; x++) {
+    strokeWeight(0);
+    stroke(r, g, b);
+    fill("#ccccca");
+    rect(windowWidth/2 - 9 * cellSize / 2 + x * (cellSize + GAP), windowHeight - 240 + GAP, cellSize, 60, 5);
+  }
+}
+
+function displayTRKeyboard() {
+  for (let x = 0; x < 7; x++) {
+    strokeWeight(0);
+    stroke(r, g, b);
+    fill("#ccccca");
+    rect(windowWidth/2 - 7 * cellSize / 2 + x * (cellSize + GAP), windowHeight - 180 + 2 * GAP, cellSize, 60, 5);
+  }
+  // rect(windowWidth/2 - 7 * cellSize / 2 + (cellSize + GAP) - 135, windowHeight - 300 + 120 + 2 * GAP, cellSize + 45, 60, 5);
+
+  // rect(windowWidth/2 - 7 * cellSize / 2 + 9 * (cellSize + GAP) - 90, windowHeight - 300 + 120 + 2 * GAP, cellSize + 20, 60, 5);
 }
