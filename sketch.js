@@ -10,6 +10,9 @@ let lettersGrid = [[0, 0, 0, 0, 0],
                  [0, 0, 0, 0, 0],
                  [0, 0, 0, 0, 0]];
 
+let firstRowKY = ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"];
+let secondRowKey = ["a", "s", "d", "f", "g", "h", "j", "k", "l"];
+let thirdRowKey = ["z", "x", "c", "v", "b", "n", "m"];
 
 
 const LETTERS_PER_ROW = 5;
@@ -36,12 +39,14 @@ let listOfWords = ["shard", "prism", "eager", "plain", "bulky", "steel", "dense"
 let wrongSoundEffect;
 let correctSoundEffect;
 let pressingSoundEffect;
+let titleFont;
 
 
 function preload() {
   wrongSoundEffect = loadSound('wrong-answer.mp3');
   correctSoundEffect = loadSound('correct-answer.mp3');
   pressingSoundEffect = loadSound('pressing-key.mp3');
+  titleFont = loadFont('assets/franklin-normal-700.ttf');
 }
 
 function setup() {
@@ -55,6 +60,7 @@ function draw() {
   background(255);
   textSize(50);
   fill("black");
+  textFont(titleFont);
   text("WORDLE", windowWidth / 2 + 25, 460);
   showLettersGrid();
   showCurrentWord();
@@ -86,7 +92,7 @@ function showLettersGrid() {
           //Change grid color
           strokeWeight(0);
           stroke(10);
-          fill("#15ad29");
+          fill("#6aaa64");
           square(posX, posY, cellSize);
 
           //Display letters
@@ -99,7 +105,7 @@ function showLettersGrid() {
           //Change grid color
           strokeWeight(0);
           stroke(0);
-          fill("#20a131");
+          fill("#6aaa64");
           square(posX, posY, cellSize);
           
 
@@ -249,8 +255,11 @@ function displayTRKeyboard() {
     stroke(r, g, b);
     fill("#ccccca");
     rect(windowWidth/2 - 7 * cellSize / 2 + x * (cellSize + GAP), windowHeight - 180 + 2 * GAP, cellSize, 60, 5);
-  }
-  // rect(windowWidth/2 - 7 * cellSize / 2 + (cellSize + GAP) - 135, windowHeight - 300 + 120 + 2 * GAP, cellSize + 45, 60, 5);
 
-  // rect(windowWidth/2 - 7 * cellSize / 2 + 9 * (cellSize + GAP) - 90, windowHeight - 300 + 120 + 2 * GAP, cellSize + 20, 60, 5);
+
+    textSize(40);
+    fill("black");
+    textAlign(CENTER, CENTER);
+    text(thirdRowKey[x].toUpperCase(), windowWidth/2 - 7 * cellSize / 2 + x * (cellSize + GAP) + 25.5, windowHeight - 180 + 2 * GAP + 33);
+  }
 }
