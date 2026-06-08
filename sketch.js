@@ -10,9 +10,9 @@ let lettersGrid = [[0, 0, 0, 0, 0],
                    [0, 0, 0, 0, 0],
                    [0, 0, 0, 0, 0]];
 
-let visualKeyboardLetters = [["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
-                             ["a", "s", "d", "f", "g", "h", "j", "k", "l"],
-                             ["z", "x", "c", "v", "b", "n", "m"]];
+// let visualKeyboardLetters = [["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
+//                              ["a", "s", "d", "f", "g", "h", "j", "k", "l"],
+//                              ["z", "x", "c", "v", "b", "n", "m"]];
 
 const LETTERS_PER_ROW = 5;
 const COLS = 6;
@@ -21,19 +21,16 @@ const CELLSIZE = 50;
 
 let typedLetters = [];
 let chosenWord = [];
-
-let win;
-
-
+let moving = true;
+let win = false;
 let r = 211;
 let g = 211;
 let b = 211;
-
 let currentCols = 0;
 let currentLetter = 0;
 
 
-let listOfWords = ["shard", "prism", "eager", "plain", "bulky", "steel", "dense", "cruel", "solid", "tense", "fence", "chart", "paint", "rural", "baste", "gofer", "rower", "krill", "wafer", "savvy", "wound"]
+let listOfWords = ["shard", "prism", "eager", "plain", "bulky", "steel", "dense", "cruel", "solid", "tense", "fence", "chart", "paint", "rural", "baste", "gofer", "rower", "krill", "wafer", "savvy", "wound"];
 
 let wrongSoundEffect;
 let correctSoundEffect;
@@ -59,6 +56,7 @@ function setup() {
 }
 
 function draw() {
+  let rectX = windowWidth;
   background(255);
   textSize(70);
   fill("black");
@@ -66,20 +64,43 @@ function draw() {
   text("WORDLE", windowWidth / 2 + 25, 460);
   showLettersGrid();
   showCurrentWord();
+  if (win === true || win === false && currentCols === 6) {
+    if (moving === true) {
+      rectX -= 1;
+    }
+    if (rectX < 0) {
+      moving = false;
+    }
+
+    fill("black");
+    rect(rectX, 0, windowWidth, windowHeight);
+
+
+    if (win === true) {
+      console.log(rectX);
+      textSize(90);
+      fill("black");
+      textFont(titleFont);
+      text("YOU WIN", windowWidth / 2 + 25, 350);
+      noLoop();
+    }
+    if (win === false && currentCols === 6) {
+      textSize(90);
+      fill("black");
+      textFont(titleFont);
+      text("YOU LOSE", windowWidth / 2 + 25, 350);
+      textSize(60);
+      text("THE WORD WAS" + chosenWord, windowWidth / 2 + 25, 420);
+      noLoop();
+    }
+  }
   // displayVisualKeyboard();
-
-
-  for (key of keyPad) {
-    key.draw();
-  }
-  if (win === true) {
-
-    noLoop();
-  }
+  // for (key of keyPad) {
+  //   key.draw();
+  // }
 }
 
-
-
+//Display letters on grid
 function showLettersGrid() {
   for (let y = 0; y < COLS; y++) {
     for (let x = 0; x < LETTERS_PER_ROW; x++) {
@@ -157,7 +178,6 @@ function showLettersGrid() {
 
 //Input letters
 function keyTyped() {
-  
   if (keyCode >= 65 && keyCode <= 90 && typedLetters.length < 5 && currentCols < COLS) {
     typedLetters.push(key);
     pressingSoundEffect.play();
@@ -176,7 +196,7 @@ function keyPressed() {
   }
 
   if (currentCols < COLS) {
-
+  //Check word by pressing ENTER
     if (typedLetters.length === LETTERS_PER_ROW && keyCode === ENTER) {
       for (let char = 0; char < typedLetters.length; char++) {
         lettersGrid[currentCols][char] = typedLetters[char];
@@ -188,23 +208,22 @@ function keyPressed() {
       else {
         correctSoundEffect.play();
       }
-
       currentCols += 1;
       currentLetter = 0;
-
       typedLetters.length = 0;
 
       console.log(lettersGrid);
-      console.log(win);
+      console.log(moving);
+      console.log(currentCols);
     }
   }
 }
 
-
+//Chose a random target word from the list
 function choseRandomWord() {
   chosenWord = split(random(listOfWords), '');
 }
-
+//Return true or false base on the word input
 function checkCorrect() {
   let correctLetters = 0;
 
@@ -218,13 +237,11 @@ function checkCorrect() {
   }
 }
 
-
+//Show current typed word on a row
 function showCurrentWord() {
   textSize(40);
   fill("black");
   textAlign(CENTER, CENTER);
-
-  //Display letters into grid
   for (let i = 0; i < typedLetters.length; i++) {
 
     let posX = windowWidth/2 - LETTERS_PER_ROW * CELLSIZE / 2 + i * (CELLSIZE + GAP);
@@ -308,49 +325,49 @@ function showCurrentWord() {
 //   }
 // }
 
-function displayVisualKeyboard() {
+// function displayVisualKeyboard() {
 
-  //First Row
-  for (let x = 0; x < visualKeyboardLetters[0].length; x++) {
-    let posXRow1 = windowWidth/2 - 10 * CELLSIZE / 2 + x * (CELLSIZE + GAP);
-    let posYRow1 = windowHeight - 300 + GAP;
+//   //First Row
+//   for (let x = 0; x < visualKeyboardLetters[0].length; x++) {
+//     let posXRow1 = windowWidth/2 - 10 * CELLSIZE / 2 + x * (CELLSIZE + GAP);
+//     let posYRow1 = windowHeight - 300 + GAP;
     
-    keyPad.push(new key(visualKeyboardLetters[0][x], posXRow1, posYRow1, CELLSIZE, 60));
-  }
+//     keyPad.push(new key(visualKeyboardLetters[0][x], posXRow1, posYRow1, CELLSIZE, 60));
+//   }
 
-  for (let x = 0; x < visualKeyboardLetters[1].length; x++) {
-    let posXRow2 = windowWidth/2 - 9 * CELLSIZE / 2 + x * (CELLSIZE + GAP);
-    let posYRow2 = windowHeight - 240 + GAP;
+//   for (let x = 0; x < visualKeyboardLetters[1].length; x++) {
+//     let posXRow2 = windowWidth/2 - 9 * CELLSIZE / 2 + x * (CELLSIZE + GAP);
+//     let posYRow2 = windowHeight - 240 + GAP;
 
-    keyPad.push(new key(visualKeyboardLetters[1][x], posXRow2, posYRow2, CELLSIZE, 60));
-  }
+//     keyPad.push(new key(visualKeyboardLetters[1][x], posXRow2, posYRow2, CELLSIZE, 60));
+//   }
 
-  for (let x = 0; x < visualKeyboardLetters[1].length; x++) {
-    let posXRow3 = windowWidth/2 - 7 * CELLSIZE / 2 + x * (CELLSIZE + GAP);
-    let posYRow3 = windowHeight - 180 + GAP;
+//   for (let x = 0; x < visualKeyboardLetters[1].length; x++) {
+//     let posXRow3 = windowWidth/2 - 7 * CELLSIZE / 2 + x * (CELLSIZE + GAP);
+//     let posYRow3 = windowHeight - 180 + GAP;
 
-    keyPad.push(new key(visualKeyboardLetters[2][x], posXRow3, posYRow3, CELLSIZE, 60));
-  }
-}
+//     keyPad.push(new key(visualKeyboardLetters[2][x], posXRow3, posYRow3, CELLSIZE, 60));
+//   }
+// }
 
-class key {
+// // class key {
 
-  constructor(char, x, y, w, h,) {
-    this.char = char;
-    this.x = x;
-    this.y = y;
-    this.w = w;
-    this.h = h;
-    this.color = "#ccccca";
-  }
+//   constructor(char, x, y, w, h,) {
+//     this.char = char;
+//     this.x = x;
+//     this.y = y;
+//     this.w = w;
+//     this.h = h;
+//     this.color = "#ccccca";
+//   }
 
-  draw() {
-    fill(this.color);
-    stroke(255);
-    rect(this.x, this.y, this.w, this.h, 5);
+//   draw() {
+//     fill(this.color);
+//     stroke(255);
+//     rect(this.x, this.y, this.w, this.h, 5);
     
 
-    fill("black");
-    text(this.char, this.x, this.y);
-  }
-}
+//     fill("black");
+//     text(this.char, this.x, this.y);
+//   }
+// }
