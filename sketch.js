@@ -10,9 +10,9 @@ let lettersGrid = [[0, 0, 0, 0, 0],
                    [0, 0, 0, 0, 0],
                    [0, 0, 0, 0, 0]];
 
-// let visualKeyboardLetters = [["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
-//                              ["a", "s", "d", "f", "g", "h", "j", "k", "l"],
-//                              ["z", "x", "c", "v", "b", "n", "m"]];
+let visualKeyboardLetters = [["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
+                             ["a", "s", "d", "f", "g", "h", "j", "k", "l"],
+                             ["z", "x", "c", "v", "b", "n", "m"]];
 
 const LETTERS_PER_ROW = 5;
 const COLS = 6;
@@ -28,7 +28,8 @@ let g = 211;
 let b = 211;
 let currentCols = 0;
 let currentLetter = 0;
-
+let targetWord = [];
+let rectX;
 
 let listOfWords = ["shard", "prism", "eager", "plain", "bulky", "steel", "dense", "cruel", "solid", "tense", "fence", "chart", "paint", "rural", "baste", "gofer", "rower", "krill", "wafer", "savvy", "wound"];
 
@@ -37,7 +38,6 @@ let correctSoundEffect;
 let pressingSoundEffect;
 let lettersFont;
 let titleFont;
-
 let keyPad = [];
 
 function preload() {
@@ -51,12 +51,12 @@ function preload() {
 function setup() {
   createCanvas(windowWidth, windowHeight);
   choseRandomWord();
+  rectX = windowWidth;
   console.log(chosenWord);
   
 }
 
 function draw() {
-  let rectX = windowWidth;
   background(255);
   textSize(70);
   fill("black");
@@ -64,41 +64,27 @@ function draw() {
   text("WORDLE", windowWidth / 2 + 25, 460);
   showLettersGrid();
   showCurrentWord();
-  if (win === true || win === false && currentCols === 6) {
-    if (moving === true) {
-      rectX -= 1;
-    }
-    if (rectX < 0) {
-      moving = false;
-    }
-
+  displayVisualKeyboard();
+  if (win === true) {
+    stroke(255);
+    textSize(90);
     fill("black");
-    rect(rectX, 0, windowWidth, windowHeight);
-
-
-    if (win === true) {
-      console.log(rectX);
-      textSize(90);
-      fill("black");
-      textFont(titleFont);
-      text("YOU WIN", windowWidth / 2 + 25, 350);
-      noLoop();
-    }
-    if (win === false && currentCols === 6) {
-      textSize(90);
-      fill("black");
-      textFont(titleFont);
-      text("YOU LOSE", windowWidth / 2 + 25, 350);
-      textSize(60);
-      text("THE WORD WAS" + chosenWord, windowWidth / 2 + 25, 420);
-      noLoop();
-    }
+    textFont(titleFont);
+    text("YOU WIN", windowWidth / 2 + 25, 200);
+    noLoop();
   }
-  // displayVisualKeyboard();
-  // for (key of keyPad) {
-  //   key.draw();
-  // }
+  if (win === false && currentCols === 6) {
+    stroke(255);
+    textSize(90);
+    fill("black");
+    textFont(titleFont);
+    text("YOU LOSE", windowWidth / 2 + 25, 200);
+    textSize(60);
+    text("THE WORD WAS " + targetWord, windowWidth / 2 + 25, 270);
+    noLoop();
+  }
 }
+
 
 //Display letters on grid
 function showLettersGrid() {
@@ -222,6 +208,7 @@ function keyPressed() {
 //Chose a random target word from the list
 function choseRandomWord() {
   chosenWord = split(random(listOfWords), '');
+  targetWord = join(chosenWord, "").toUpperCase();
 }
 //Return true or false base on the word input
 function checkCorrect() {
@@ -254,120 +241,73 @@ function showCurrentWord() {
   }
 }
 
-// function displayVisualKeyboard() {
+function displayVisualKeyboard() {
 
-//   //First Row Keyboard
-//   for (let x = 0; x < 10; x++) {
+  //First Row Keyboard
+  for (let x = 0; x < 10; x++) {
 
-//     let posXRow1 = windowWidth/2 - 10 * CELLSIZE / 2 + x * (CELLSIZE + GAP);
-//     let posYRow1 = windowHeight - 300 + GAP;
+    let posXRow1 = windowWidth/2 - 10 * CELLSIZE / 2 + x * (CELLSIZE + GAP);
+    let posYRow1 = windowHeight - 300 + GAP;
 
-//     if (chosenWord.includes(visualKeyboardLetters[0][x]) && typedLetters.includes(visualKeyboardLetters[0][x])) {
-//       strokeWeight(0);
-//       stroke(r, g, b);
-//       fill("#ccccca");
-//       textFont(lettersFont);
-//       rect(posXRow1, posYRow1, CELLSIZE, 60, 5);
-//     }
-//     else {
-//       strokeWeight(0);
-//       stroke(r, g, b);
-//       fill("#ccccca");
-//       textFont(lettersFont);
-//       rect(posXRow1, posYRow1, CELLSIZE, 60, 5);
-//     }
+    if (chosenWord.includes(visualKeyboardLetters[0][x]) && typedLetters.includes(visualKeyboardLetters[0][x])) {
+      strokeWeight(0);
+      stroke(r, g, b);
+      fill("#e9c456");
+      textFont(lettersFont);
+      rect(posXRow1, posYRow1, CELLSIZE, 60, 5);
+    }
+    else {
+      strokeWeight(0);
+      stroke(r, g, b);
+      fill("#ccccca");
+      textFont(lettersFont);
+      rect(posXRow1, posYRow1, CELLSIZE, 60, 5);
+    }
 
-//     textSize(30);
-//     fill("black");
-//     textAlign(CENTER. CENTER);
-//     textFont(lettersFont);
-//     text(visualKeyboardLetters[0][x].toUpperCase(), posXRow1 + 25, posYRow1 + 25);
-//   }
+    textSize(30);
+    fill("black");
+    textAlign(CENTER. CENTER);
+    textFont(lettersFont);
+    text(visualKeyboardLetters[0][x].toUpperCase(), posXRow1 + 25, posYRow1 + 25);
+  }
 
-//   //Second Row Keyboard
-//   for (let x = 0; x < 9; x++) {
+  //Second Row Keyboard
+  for (let x = 0; x < 9; x++) {
 
-//     let posXRow2 = windowWidth/2 - 9 * CELLSIZE / 2 + x * (CELLSIZE + GAP);
-//     let posYRow2 = windowHeight - 240 + GAP;
+    let posXRow2 = windowWidth/2 - 9 * CELLSIZE / 2 + x * (CELLSIZE + GAP);
+    let posYRow2 = windowHeight - 240 + GAP;
 
-//     strokeWeight(0);
-//     stroke(r, g, b);
-//     fill("#ccccca");
-//     textFont(lettersFont);
-//     rect(posXRow2, posYRow2 + GAP, CELLSIZE, 60, 5);
-
-
-//     textSize(30);
-//     fill("black");
-//     textAlign(CENTER. CENTER);
-//     textFont(lettersFont);
-//     text(visualKeyboardLetters[1][x].toUpperCase(), posXRow2 + 25, posYRow2 + 34);
-//   }
-
-//   //Third Row Keyboard
-//   for (let x = 0; x < 7; x++) {
-
-//     let posXRow3 = windowWidth/2 - 7 * CELLSIZE / 2 + x * (CELLSIZE + GAP);
-//     let posYRow3 = windowHeight - 180 + GAP;
-
-//     strokeWeight(0);
-//     stroke(r, g, b);
-//     fill("#ccccca");
-//     textFont(lettersFont);
-//     rect(posXRow3, posYRow3 + 2* GAP, CELLSIZE, 60, 5);
+    strokeWeight(0);
+    stroke(r, g, b);
+    fill("#ccccca");
+    textFont(lettersFont);
+    rect(posXRow2, posYRow2 + GAP, CELLSIZE, 60, 5);
 
 
-//     textSize(30);
-//     fill("black");
-//     textAlign(CENTER. CENTER);
-//     textFont(lettersFont);
-//     text(visualKeyboardLetters[2][x].toUpperCase(), posXRow3 + 25, posYRow3 + 44);
-//   }
-// }
+    textSize(30);
+    fill("black");
+    textAlign(CENTER. CENTER);
+    textFont(lettersFont);
+    text(visualKeyboardLetters[1][x].toUpperCase(), posXRow2 + 25, posYRow2 + 34);
+  }
 
-// function displayVisualKeyboard() {
+  //Third Row Keyboard
+  for (let x = 0; x < 7; x++) {
 
-//   //First Row
-//   for (let x = 0; x < visualKeyboardLetters[0].length; x++) {
-//     let posXRow1 = windowWidth/2 - 10 * CELLSIZE / 2 + x * (CELLSIZE + GAP);
-//     let posYRow1 = windowHeight - 300 + GAP;
-    
-//     keyPad.push(new key(visualKeyboardLetters[0][x], posXRow1, posYRow1, CELLSIZE, 60));
-//   }
+    let posXRow3 = windowWidth/2 - 7 * CELLSIZE / 2 + x * (CELLSIZE + GAP);
+    let posYRow3 = windowHeight - 180 + GAP;
 
-//   for (let x = 0; x < visualKeyboardLetters[1].length; x++) {
-//     let posXRow2 = windowWidth/2 - 9 * CELLSIZE / 2 + x * (CELLSIZE + GAP);
-//     let posYRow2 = windowHeight - 240 + GAP;
+    strokeWeight(0);
+    stroke(r, g, b);
+    fill("#ccccca");
+    textFont(lettersFont);
+    rect(posXRow3, posYRow3 + 2* GAP, CELLSIZE, 60, 5);
 
-//     keyPad.push(new key(visualKeyboardLetters[1][x], posXRow2, posYRow2, CELLSIZE, 60));
-//   }
 
-//   for (let x = 0; x < visualKeyboardLetters[1].length; x++) {
-//     let posXRow3 = windowWidth/2 - 7 * CELLSIZE / 2 + x * (CELLSIZE + GAP);
-//     let posYRow3 = windowHeight - 180 + GAP;
-
-//     keyPad.push(new key(visualKeyboardLetters[2][x], posXRow3, posYRow3, CELLSIZE, 60));
-//   }
-// }
-
-// // class key {
-
-//   constructor(char, x, y, w, h,) {
-//     this.char = char;
-//     this.x = x;
-//     this.y = y;
-//     this.w = w;
-//     this.h = h;
-//     this.color = "#ccccca";
-//   }
-
-//   draw() {
-//     fill(this.color);
-//     stroke(255);
-//     rect(this.x, this.y, this.w, this.h, 5);
-    
-
-//     fill("black");
-//     text(this.char, this.x, this.y);
-//   }
-// }
+    textSize(30);
+    fill("black");
+    textAlign(CENTER. CENTER);
+    textFont(lettersFont);
+    text(visualKeyboardLetters[2][x].toUpperCase(), posXRow3 + 25, posYRow3 + 44);
+  }
+}
