@@ -10,7 +10,7 @@ let lettersGrid = [[0, 0, 0, 0, 0],
                    [0, 0, 0, 0, 0],
                    [0, 0, 0, 0, 0]];
 
-let visualKeyboardLetters = [["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
+let keyboardLetters = [["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
                              ["a", "s", "d", "f", "g", "h", "j", "k", "l"],
                              ["z", "x", "c", "v", "b", "n", "m"]];
 
@@ -64,7 +64,7 @@ function draw() {
   text("WORDLE", windowWidth / 2 + 25, 460);
   showLettersGrid();
   showCurrentWord();
-  displayVisualKeyboard();
+  displayKeyboard();
   if (win === true) {
     stroke(255);
     textSize(90);
@@ -241,7 +241,7 @@ function showCurrentWord() {
   }
 }
 
-function displayVisualKeyboard() {
+function displayKeyboard() {
 
   //First Row Keyboard
   for (let x = 0; x < 10; x++) {
@@ -249,26 +249,25 @@ function displayVisualKeyboard() {
     let posXRow1 = windowWidth/2 - 10 * CELLSIZE / 2 + x * (CELLSIZE + GAP);
     let posYRow1 = windowHeight - 300 + GAP;
 
-    if (chosenWord.includes(visualKeyboardLetters[0][x]) && typedLetters.includes(visualKeyboardLetters[0][x])) {
-      strokeWeight(0);
-      stroke(r, g, b);
-      fill("#e9c456");
-      textFont(lettersFont);
-      rect(posXRow1, posYRow1, CELLSIZE, 60, 5);
-    }
-    else {
-      strokeWeight(0);
-      stroke(r, g, b);
-      fill("#ccccca");
-      textFont(lettersFont);
-      rect(posXRow1, posYRow1, CELLSIZE, 60, 5);
-    }
+    // if (chosenWord.includes(keyboardLetters[0][x]) && typedLetters.includes(keyboardLetters[0][x])) {
+    //   strokeWeight(0);
+    //   stroke(r, g, b);
+    //   fill("#e9c456");
+    //   textFont(lettersFont);
+    //   rect(posXRow1, posYRow1, CELLSIZE, 60, 5);
+    // }
+    // else {
+    strokeWeight(0);
+    stroke(r, g, b);
+    fill("#ccccca");
+    textFont(lettersFont);
+    rect(posXRow1, posYRow1, CELLSIZE, 60, 5);
 
     textSize(30);
     fill("black");
     textAlign(CENTER. CENTER);
     textFont(lettersFont);
-    text(visualKeyboardLetters[0][x].toUpperCase(), posXRow1 + 25, posYRow1 + 25);
+    text(keyboardLetters[0][x].toUpperCase(), posXRow1 + 25, posYRow1 + 25);
   }
 
   //Second Row Keyboard
@@ -286,9 +285,9 @@ function displayVisualKeyboard() {
 
     textSize(30);
     fill("black");
-    textAlign(CENTER. CENTER);
+    textAlign(CENTER, CENTER);
     textFont(lettersFont);
-    text(visualKeyboardLetters[1][x].toUpperCase(), posXRow2 + 25, posYRow2 + 34);
+    text(keyboardLetters[1][x].toUpperCase(), posXRow2 + 25, posYRow2 + 34);
   }
 
   //Third Row Keyboard
@@ -308,6 +307,6 @@ function displayVisualKeyboard() {
     fill("black");
     textAlign(CENTER. CENTER);
     textFont(lettersFont);
-    text(visualKeyboardLetters[2][x].toUpperCase(), posXRow3 + 25, posYRow3 + 44);
+    text(keyboardLetters[2][x].toUpperCase(), posXRow3 + 25, posYRow3 + 44);
   }
 }
